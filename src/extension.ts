@@ -67,9 +67,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 export function deactivate(): void {
   logger.info('deactivate');
+  // inlineProvider, statusBar, command disposables are handled via
+  // context.subscriptions. Just clean up the bare provider registrations
+  // (added/removed dynamically on config change, not via subscriptions)
+  // and the logger.
   inlineRegistration?.dispose();
   intellisenseRegistration?.dispose();
-  inlineProvider?.cancelInFlight();
   logger.dispose();
 }
 

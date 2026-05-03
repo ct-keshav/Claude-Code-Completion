@@ -475,6 +475,20 @@ export class InlineProvider implements vscode.InlineCompletionItemProvider {
         this.statusBar.setError(`CLI exited with code ${result.exitCode}`);
         return null;
       }
+      // Mid-session auth failure: the CLI returned an in-stream error like
+      // "Not logged in". Surface it via the status bar so the user knows
+      // why completions stopped working.
+      if (result.errorMessage) {
+        const lower = result.errorMessage.toLowerCase();
+        if (/not logged in|please run \/login|oauth|unauthor/.test(lower)) {
+          this.statusBar.setUnauth();
+          logger.warn('inline.authLost', { message: result.errorMessage });
+        } else {
+          this.statusBar.setError(result.errorMessage.slice(0, 100));
+          logger.warn('inline.cliError', { message: result.errorMessage });
+        }
+        return null;
+      }
       let raw = result.text;
       // Single-line mode: hard-trim everything past the first newline. The
       // streaming early-exit kills the subprocess at \n, but a \n may already

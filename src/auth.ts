@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'node:path';
-import { spawn } from 'node:child_process';
+import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { execFile } from 'node:child_process';
 import { logger } from './logger';
 
 const execFileAsync = promisify(execFile);

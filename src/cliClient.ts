@@ -102,6 +102,9 @@ export interface ClaudeRunResult {
   msFirstToken: number;
   msTotal: number;
   earlyExit: boolean;
+  /** If non-null, the run completed but the CLI/model returned an error
+   * (e.g. "Not logged in"). Distinct from exitCode-non-zero. */
+  errorMessage?: string;
 }
 
 export class ClaudeRun {
@@ -169,6 +172,7 @@ export class ClaudeRun {
     let accumulated = '';
     let stderr = '';
     let earlyExit = false;
+    let errorMessage: string | undefined;
 
     child.stdout!.setEncoding('utf8');
     child.stdout!.on('data', (chunk: string) => {
@@ -190,6 +194,7 @@ export class ClaudeRun {
           }
         } else if (ev.kind === 'error') {
           logger.warn('cli.streamError', { message: ev.message });
+          if (!errorMessage) errorMessage = ev.message;
         } else if (ev.kind === 'stop' || ev.kind === 'result') {
           // surfaced via process exit
         }
@@ -233,7 +238,8 @@ export class ClaudeRun {
         stderr,
         msFirstToken,
         msTotal,
-        earlyExit
+        earlyExit,
+        errorMessage
       });
     });
   }
