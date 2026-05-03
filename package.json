@@ -180,8 +180,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext ts",
     "test": "npm run test:unit && npm run test:integration",
-    "test:unit": "tsx --test src/test/unit/*.test.ts",
-    "test:integration": "tsx --test src/test/integration/*.test.ts"
+    "test:unit": "node scripts/test.mjs src/test/unit",
+    "test:integration": "node scripts/test.mjs src/test/integration"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
