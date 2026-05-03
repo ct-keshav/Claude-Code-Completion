@@ -1,0 +1,194 @@
+{
+  "name": "claude-inline-completions",
+  "displayName": "Claude Inline Completions",
+  "description": "Cursor-style AI autocompletion powered by your authenticated Claude CLI subscription. No API key required.",
+  "version": "0.1.0",
+  "publisher": "claude-inline",
+  "license": "MIT",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "claude",
+    "anthropic",
+    "ai",
+    "autocomplete",
+    "copilot",
+    "inline completion",
+    "ghost text"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-handle/claude-inline-completions"
+  },
+  "contributes": {
+    "configuration": {
+      "title": "Claude Inline Completions",
+      "properties": {
+        "claude.completions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Claude inline completions."
+        },
+        "claude.completions.cliPath": {
+          "type": "string",
+          "default": "claude",
+          "description": "Path to the Claude CLI binary. Resolved on PATH if not absolute."
+        },
+        "claude.completions.model": {
+          "type": "string",
+          "default": "claude-sonnet-4-6",
+          "description": "Model passed to the CLI via --model. 'sonnet' (default), 'haiku', or a full model ID like 'claude-sonnet-4-6'."
+        },
+        "claude.completions.debounceMs": {
+          "type": "number",
+          "default": 250,
+          "minimum": 0,
+          "maximum": 5000,
+          "description": "Milliseconds to wait after the last keystroke before requesting a completion. Lower = snappier but more cancelled requests."
+        },
+        "claude.completions.maxPrefixChars": {
+          "type": "number",
+          "default": 1500,
+          "minimum": 0,
+          "description": "Maximum characters of prefix context sent to the model. Smaller = faster first token."
+        },
+        "claude.completions.maxSuffixChars": {
+          "type": "number",
+          "default": 400,
+          "minimum": 0,
+          "description": "Maximum characters of suffix context sent to the model. Smaller = faster first token."
+        },
+        "claude.completions.maxOutputTokens": {
+          "type": "number",
+          "default": 128,
+          "minimum": 16,
+          "maximum": 2048,
+          "description": "Soft cap on completion length. Lower = faster cutoff."
+        },
+        "claude.completions.languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "javascript",
+            "typescript",
+            "typescriptreact",
+            "javascriptreact",
+            "python",
+            "go",
+            "rust",
+            "java",
+            "cpp",
+            "c",
+            "csharp",
+            "ruby",
+            "php",
+            "swift",
+            "kotlin",
+            "scala",
+            "html",
+            "css",
+            "scss",
+            "json",
+            "yaml",
+            "markdown",
+            "shellscript"
+          ],
+          "description": "Language IDs where completions are active."
+        },
+        "claude.completions.enableInline": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline ghost-text completions."
+        },
+        "claude.completions.enableIntellisense": {
+          "type": "boolean",
+          "default": false,
+          "description": "Also surface completions in the IntelliSense list. Adds a second CLI call per request."
+        },
+        "claude.completions.batterySaver": {
+          "type": "boolean",
+          "default": true,
+          "description": "On battery, increase debounce and disable IntelliSense path."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "claude.completions.toggle",
+        "title": "Claude: Toggle Inline Completions"
+      },
+      {
+        "command": "claude.completions.triggerNow",
+        "title": "Claude: Trigger Completion Now"
+      },
+      {
+        "command": "claude.completions.clearCache",
+        "title": "Claude: Clear Completion Cache"
+      },
+      {
+        "command": "claude.completions.openLogs",
+        "title": "Claude: Open Logs"
+      },
+      {
+        "command": "claude.completions.signIn",
+        "title": "Claude: Sign In to Claude"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "claude.completions.triggerNow",
+        "key": "ctrl+alt+\\",
+        "mac": "ctrl+alt+\\",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "editor.action.inlineSuggest.acceptNextWord",
+        "key": "ctrl+right",
+        "mac": "cmd+right",
+        "when": "inlineSuggestionVisible && !editorReadonly && !suggestWidgetVisible"
+      },
+      {
+        "command": "editor.action.inlineSuggest.acceptNextLine",
+        "key": "ctrl+down",
+        "mac": "cmd+down",
+        "when": "inlineSuggestionVisible && !editorReadonly && !suggestWidgetVisible"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext ts",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "tsx --test src/test/unit/*.test.ts",
+    "test:integration": "tsx --test src/test/integration/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.57.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}
