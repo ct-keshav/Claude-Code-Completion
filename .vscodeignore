@@ -3,6 +3,7 @@
 src/**
 out/**
 node_modules/**
+scripts/**
 .gitignore
 .eslintrc.json
 esbuild.js
