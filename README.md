@@ -29,12 +29,17 @@ You do **not** need an `ANTHROPIC_API_KEY`.
 
 ## Quick start
 
-1. Install the extension.
-2. Run **Claude: Sign In to Claude** (if you haven't already logged in via `claude`).
-3. Start typing in any supported language. Inline ghost text appears after a 250ms debounce.
-4. Press `Tab` to accept; `Esc` to dismiss.
+1. **Install the Claude CLI** and make sure `claude --version` works in your terminal.
+   - Docs: <https://docs.claude.com/en/docs/claude-code/quickstart>
+   - If `claude` is not on `$PATH`, set `claude.completions.cliPath` in **User** settings to the absolute path (`which claude` / `where claude`).
+2. **Sign in to Claude.** Either run `claude` in a terminal once and complete the OAuth login, or use the **Claude: Sign In to Claude** command from the VS Code Command Palette. No `ANTHROPIC_API_KEY` is needed.
+3. **Install this extension** from the Marketplace (or `code --install-extension claude-inline-completions.vsix` if you built it locally).
+4. **Reload the window** after sign-in so the extension re-probes auth. The status-bar item should read `$(sparkle) Claude` (ready). If it shows `$(key) Claude`, click it to sign in.
+5. **Open a file** in any supported language (TypeScript, JavaScript, Python, Go, Rust, Java, C/C++, C#, Ruby, PHP, Swift, Kotlin, Scala, HTML/CSS/SCSS, JSON, YAML, Markdown, shell — see the `claude.completions.languages` setting for the full list).
+6. **Start typing.** Inline ghost text appears after a 250ms debounce. Press `Tab` to accept the whole suggestion, `Cmd+→` / `Ctrl+→` for the next word, `Cmd+↓` / `Ctrl+↓` for the next line, `Esc` to dismiss.
+7. **Force a completion at the cursor** any time with `Ctrl+Alt+\` (configurable) or the **Claude: Trigger Completion Now** command.
 
-Manual trigger: `Ctrl+Alt+\` (configurable).
+If something looks off, run **Claude: Open Logs** to see the per-request latency metrics, or **Claude: Clear Completion Cache** to drop the LRU and start fresh.
 
 ## Keybindings
 
